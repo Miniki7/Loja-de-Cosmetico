@@ -1,0 +1,14 @@
+REQUISITOS DO PROJETO:
+• Back-end deve ser em python e utilizar flask-api;
+• Front-end pode ser em ReactJs, React Native ou direto no
+Jinja2 no flask;
+• Banco de dados em SQL;
+• Mínimo de tabelas: 5
+• Mínimo de CRUD (fora as lógicas do back e front): 3
+• Trello: Toda semana deve ser atualizado (parte da nota). No trello
+deve conter as seguintes etapas: “A fazer”, “Fazendo” e “Feito”.
+Toda semana será conferido em sala de aula;
+• Deve ser atualizado toda semana no github;
+• Github: Todos integrantes devem contribuir para o projeto com
+commits e alterações convincentes. Deve haver 2 branches (uma
+para o front-end outra para o back-end)
