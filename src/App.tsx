@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import axios from "axios";
+import "./App.css";
+
+interface User {
+  nome: string;
+  email: string;
+  cargo_id: number;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState<User>({
+    nome: "",
+    email: "",
+    cargo_id: 0,
+  });
+  function inserirUsuario() {
+    axios.post("http:localhost:3000/usuarios", {
+      body: {
+        nome: user.nome,
+        email: user.email,
+        cargo_id: user.cargo_id,
+      },
+      header: {
+        "Content-Type": "Application/Json",
+      },
+    });
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <input
+          type="text"
+          id="nome"
+          value={user.nome}
+          placeholder="Nome"
+          onChange={(e) => setUser({ ...user, nome: e.target.value })}
+        />
+
+        <input
+          type="text"
+          id="email"
+          value={user.email}
+          placeholder="Email"
+          onChange={(e) => setUser({ ...user, email: e.target.value })}
+        />
+
+        <input
+          type="text"
+          id="cargo_id"
+          value={user.cargo_id}
+          placeholder="ID Cargo"
+          onChange={(e) =>
+            setUser({ ...user, cargo_id: parseInt(e.target.value) })
+          }
+        />
+        <button style={{backgroundColor: 'cyan'}} onClick={() => inserirUsuario()}>
+          Inserir Cliente
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
