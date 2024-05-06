@@ -12,3 +12,6 @@ Toda semana será conferido em sala de aula;
 • Github: Todos integrantes devem contribuir para o projeto com
 commits e alterações convincentes. Deve haver 2 branches (uma
 para o front-end outra para o back-end)
+
+Iniciar rojeto
+npm start
