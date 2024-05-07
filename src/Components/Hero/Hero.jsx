@@ -1,8 +1,12 @@
+/* importando o React e o arquivo css */
 import React from 'react';
 import './Hero.css';
+/* importando as imagens da pasta assets */
 import hand_icon from '../Assets/hand_icon.png'
 import arrow_icon from '../Assets/arrow.png'
+import hero_image from '../Assets/hero_image.png'
 
+/* Componente que cria os primeiros itens da pagina, como banner ou imagens */
 const Hero = () => {
   return (
     <div className='hero'>
@@ -10,7 +14,7 @@ const Hero = () => {
         <h2>NEEW ARRIVALS ONLY</h2>
         <div>
 
-          <div className="hand-hand-icon">
+          <div className="hero-hand-icon">
             <p>new</p>
             <img src={hand_icon} alt="" />
           </div>
@@ -23,8 +27,9 @@ const Hero = () => {
         </div>
       </div>
 
-
-      <div className="hero-right"></div>
+      <div className="hero-right">
+        <img src={hero_image} alt="" />
+      </div>
     </div>
   )
 }

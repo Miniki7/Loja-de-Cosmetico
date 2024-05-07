@@ -14,4 +14,5 @@ commits e alterações convincentes. Deve haver 2 branches (uma
 para o front-end outra para o back-end)
 
 Iniciar rojeto
+npm install
 npm start
