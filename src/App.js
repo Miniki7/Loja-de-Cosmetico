@@ -1,11 +1,15 @@
-import './App.css';
-import Navbar from './Components/Navbar/Navbar';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import './App.css';
+/* importando os componentes que vão estar em todas as paginas */
+import Navbar from './Components/Navbar/Navbar';
+import Footer from './Components/Footer/Footer'
+/* importando as paginas para navegação */
 import ShopCategory from './Pages/ShopCategory';
 import Product from './Pages/Product';
 import LoginSignup from './Pages/LoginSignup';
 import Shop from './Pages/Shop';
 import Cart from './Pages/Cart';
+
 
 function App() {
   return (
@@ -25,8 +29,7 @@ function App() {
       <Route path='/cart' element={<Cart/>}/>
       <Route path='/login' element={<LoginSignup/>}/>
       </Routes>
-
-      
+      <Footer/>
 
       </BrowserRouter>
     </div>
