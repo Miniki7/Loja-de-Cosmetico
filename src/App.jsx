@@ -1,71 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import axios from "axios";
-import "./App.css";
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import './App.css';
+/* importando os componentes que vão estar em todas as paginas */
+import Navbar from './Components/Navbar/Navbar';
+import Footer from './Components/Footer/Footer'
+/* importando as paginas para navegação */
+import ShopCategory from './Pages/ShopCategory';
+import Product from './Pages/Product';
+import LoginSignup from './Pages/LoginSignup';
+import Shop from './Pages/Shop';
+import Cart from './Pages/Cart';
+/* importando imagens da pasta assets */
+import men_banner from './Components/Assets/banner_mens.png'
+import women_banner from './Components/Assets/banner_women.png'
+import kids_banner from './Components/Assets/banner_kids.png'
 
+/* men, women and kids são nossas props(propriedades) */
 
 function App() {
-  const [user, setUser] = useState({
-    nome: "",
-    email: "",
-    cargo_id: 0,
-  });
-  function inserirUsuario() {
-    axios.post("http:localhost:3000/usuarios", {
-      body: {
-        nome: user.nome,
-        email: user.email,
-        cargo_id: user.cargo_id,
-      },
-      header: {
-        "Content-Type": "Application/Json",
-      },
-    });
-  }
-
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        <input
-          type="text"
-          id="nome"
-          value={user.nome}
-          placeholder="Nome"
-          onChange={(e) => setUser({ ...user, nome: e.target.value })}
-        />
+    <div>
+      <BrowserRouter>
+      <Navbar/>
+      <Routes>
+        <Route path='/' element={<Shop/>}/>
+        <Route path='/mens' element={<ShopCategory banner={men_banner} category="men"/>}/>
+        <Route path='/womens' element={<ShopCategory banner={women_banner} category="women"/>}/>
+        <Route path='/kids' element={<ShopCategory banner={kids_banner} category="kid"/>}/>
+        
+        <Route path='/product' element={<Product/>}>
+        <Route path=':productId' element={<Product/>}/>
+      </Route>
 
-        <input
-          type="text"
-          id="email"
-          value={user.email}
-          placeholder="Email"
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
-        />
+      <Route path='/cart' element={<Cart/>}/>
+      <Route path='/login' element={<LoginSignup/>}/>
+      </Routes>
+      <Footer/>
 
-        <input
-          type="text"
-          id="cargo_id"
-          value={user.cargo_id}
-          placeholder="ID Cargo"
-          onChange={(e) =>
-            setUser({ ...user, cargo_id: parseInt(e.target.value) })
-          }
-        />
-        <button style={{backgroundColor: 'cyan'}} onClick={() => inserirUsuario()}>
-          Inserir Cliente
-        </button>
-      </div>
-
-    </>
-  )
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
