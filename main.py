@@ -1,7 +1,9 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
+ma = Marshmallow(app)
 
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@localhost/flask'
@@ -24,6 +26,11 @@ class Usuario(db.Model):
         self.email = email
         self.senha = senha
         self.role = role
+
+
+class UsuarioSchema(ma.Schema):
+    class Meta:
+        fields = ('codigo', 'nome', 'email', 'senha', 'role')
 
 
 class Produto(db.Model):
@@ -103,6 +110,33 @@ class Venda(db.Model):
         self.codusuario = codusuario
         self.quantidade = quantidade
         self.valor = valor
+
+
+####################################
+
+
+usuario_schema = UsuarioSchema()
+usuarios_schema = UsuarioSchema(many=True)
+
+
+@app.route('/get', methods = ['GET'])
+def get_usuario():
+    return jsonify({"hello world"})
+
+
+@app.route('/post', methods = ['POST'])
+def add_usuario():
+    codigo = request.json['codigo']
+    nome = request.json['nome']
+    email = request.json['email']
+    senha = request.json['senha']
+    role = request.json['role']
+
+    usuario = Usuario(codigo, nome, email, senha, role)
+    db.session.ad(usuario)
+    db.session.commit()
+    return usuario_schema.jsonify(usuario)
+
 
 @app.route('/')
 def home():
