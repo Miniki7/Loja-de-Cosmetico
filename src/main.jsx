@@ -12,6 +12,7 @@ import Crud_Fornecedor from './Pages/Admin/Crud_Fornecedor'
 import Crud_Produto from './Pages/Admin/Crud_Produto'
 import Crud_Usuario from './Pages/Admin/Crud_Usuario'
 import Menu_de_Cadastros from './Pages/Admin/Menu_de_Cadastros'
+import RegisterUser from './Pages/RegisterUser/RegisterUser'
 
 
 
@@ -20,6 +21,10 @@ import './index.css';
 import ReactDOM from 'react-dom/client';
 import Footer from './Components/Footer/Footer';
 import Navbar from './Components/Navbar/Navbar';
+
+//import da estilização da tabela
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const Layout = () => (
   <div>
@@ -70,6 +75,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginSignup />
+  },
+  {
+    path: '/user-register',
+    element: <RegisterUser />
   },
   {
     path: '/menu_cad',

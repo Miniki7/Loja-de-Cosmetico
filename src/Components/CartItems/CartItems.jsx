@@ -8,12 +8,12 @@ const CartItems = () => {
   return (
     <div className='cartitems'>
       <div className="cartitems-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Price</p>
-        <p>Quantity</p>
+        <p>Produtos</p>
+        <p>Título</p>
+        <p>Preço</p>
+        <p>Quantidade</p>
         <p>Total</p>
-        <p>Remove</p>
+        <p>Remover</p>
       </div>
       <hr/>
       {all_product.map((e)=>{
@@ -35,7 +35,7 @@ const CartItems = () => {
       })}
       <div className="cartitems-down">
         <div className="cartitems-total">
-            <h1>Cart Totals</h1>
+            <h1>Total do carrinho</h1>
             <div>
                 <div className="cartitems-total-item">
                     <p>Subtotal</p>
@@ -43,7 +43,7 @@ const CartItems = () => {
                 </div>
                 <hr/>
                 <div className="cartitems-total-item">
-                    <p>Shipping Fee</p>
+                    <p>Taxa de envio</p>
                     <p>Free</p>
                 </div>
                 <hr/>
