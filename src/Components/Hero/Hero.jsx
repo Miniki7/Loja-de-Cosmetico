@@ -4,7 +4,7 @@ import './Hero.css';
 /* importando as imagens da pasta assets */
 import hand_icon from '../Assets/hand_icon.png'
 import arrow_icon from '../Assets/arrow.png'
-import hero_image from '../Assets/hero_image.png'
+import hero_image_removebg_preview from '../Assets/hero_image_removebg_preview.png'
 
 /* Componente que cria os primeiros itens da pagina, como banner ou imagens */
 const Hero = () => {
@@ -15,20 +15,20 @@ const Hero = () => {
         <div>
 
           <div className="hero-hand-icon">
-            <p>novas</p>
+            <p>Novas</p>
             <img src={hand_icon} alt="" />
           </div>
           <p>coleções</p>
           <p>para todos</p>
         </div>
         <div className="hero-latest-btn">
-          <div>Latest Collection</div>
+          <div>Últimas coleção</div>
           <img src={arrow_icon} alt="" />
         </div>
       </div>
 
       <div className="hero-right">
-        <img src={hero_image} alt="" />
+        <img src={hero_image_removebg_preview} alt="" />
       </div>
     </div>
   )
