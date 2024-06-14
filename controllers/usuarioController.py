@@ -58,18 +58,3 @@ def usuarioController():
             
             except Exception as e:
                 return 'nao foi possivel alterar usuario, {}'.format(str(e)), 405
-            
-
-def signUpController():
-
-    if request.method == 'POST':
-            try: 
-                data = request.get_json()
-                print(data)
-                user = usuario(data['nome'], data['email'], data['senha'], data['role'])
-                db.session.add(user)
-                db.session.commit()
-                return 'usuario criado com sucesso', 200 
-            
-            except Exception as e:
-                return 'o usuario nao foi criado, {}'.format(e), 405

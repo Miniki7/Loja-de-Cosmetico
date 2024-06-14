@@ -2,6 +2,7 @@ from flask import request, render_template
 from database.db import db
 from models.produto import produto
 
+
 def produtoController():
 
         if request.method == 'POST':
@@ -43,35 +44,22 @@ def produtoController():
 
         elif request.method == 'PUT':
             try:
-                codigo = request.json['codigo']
-                data = produto.query.get(codigo)
-                if not data:
-                    return "Produto não encontrado", 404
-                
-                nome = request.json.get('nome', produto.nome)
-                descricao = request.json.get('descricao', produto.descricao)
-                valor = request.json.get('valor', produto.valor)
-                quantidade = request.json.get('quantidade', produto.quantidade)
-                tipo = request.json.get('tipo', produto.tipo)
-                marca = request.json.get('marca', produto.marca)    
-                categoria = request.json.get('categoria', produto.categoria)
-                foto = request.json.get('foto', produto.foto)
+              data = request.get_json()
+              codigo = data['codigo']
+              produtos = produto.query.get(codigo)
+              if produtos is None:
+                   return 'produto não encontrado', 404
+              produtos.nome = data.get('nome', produtos.nome)
+              produtos.descricao = data.get('descricao', produtos.descricao)
+              produtos.valor = data.get('valor', produtos.valor)
+              produtos.quantidade = data.get('quantidade', produtos.quantidade)
+              produtos.tipo = data.get('tipo', produtos.tipo)
+              produtos.marca = data.get('marca', produtos.marca)
+              produtos.categoria = data.get('categoria', produtos.categoria)
+              produtos.foto = data.get('foto', produtos.foto)
 
-
-                produto.nome = nome
-                produto.descricao = descricao
-                produto.valor = valor  
-                produto.quantidade = quantidade
-                produto.tipo = tipo
-                produto.marca = marca
-                produto.categoria = categoria
-                produto.foto = foto
-
-
-                db.session.commit()
-                data = produto.query.all()
-                return render_template('home.html', data={'produto': [produto.to_dict() for produto in data]})
-
+              db.session.commit()
+              return 'produto atualizado com sucesso', 200 
             
             except Exception as e:
                 return 'nao foi possivel alterar produto, {}'.format(str(e)), 405

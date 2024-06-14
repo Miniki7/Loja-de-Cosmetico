@@ -1,6 +1,9 @@
-from routes.usuarioRoutes import usuariosRoutes
-from routes.produtoRoutes import produtosRoutes
+from routes.usuarioRoutes import usuario
+from routes.produtoRoutes import produto
+from routes.fornecedorRoutes import fornecedores
+
 
 def default_routes(app):
-    app.register_blueprint(usuariosRoutes)
-    app.register_blueprint(produtosRoutes)
+    usuario(app)
+    produto(app)
+    fornecedores(app)
