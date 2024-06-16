@@ -166,10 +166,10 @@ const Table_Produtos = () => {
               />
                </Form.Group>
             <Form.Group controlId="formQuantidade">
-              <Form.Label>quantidade</Form.Label>
+              <Form.Label>Quantidade</Form.Label>
               <Form.Control
                 type="number"
-                name="Quantidade"
+                name="quantidade"
                 value={currentProdutos.quantidade}
                 onChange={handleChange}
               />

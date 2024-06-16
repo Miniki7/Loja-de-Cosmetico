@@ -9,11 +9,11 @@ const Menu_de_Cadastros = () =>{
             <button className="button-admin-home">Cadastra Produtos</button>
             </Link>
             <Link to={"/Crud_Usuarios"}>
-            <button className="button-admin-home">Cadastra Fornecedores</button>
+            <button className="button-admin-home">Cadastra Usuários</button>
             </Link>
             <br/>
             <Link to={"/Crud_Fornecedor"}>
-            <button className="button-admin-home">Cadastra Usuários </button>
+            <button className="button-admin-home">Cadastra Fornecedores</button>
             </Link>
         </div>
     )
