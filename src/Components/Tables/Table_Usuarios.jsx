@@ -67,7 +67,7 @@ const Table_Usuarios = () => {
 
   const handleDelete = async (codigo) => {
     try {
-      await axios.delete(`http://localhost:3000/usuario`);
+      await axios.delete(`http://localhost:3000/usuario`, { data: { codigo } });
       setUsuarios(usuarios.filter((user) => user.codigo !== codigo));
     } catch (error) {
       console.error('Erro ao deletar usuário:', error.message);
