@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 import './Tables.css';
 
 const Table_Produtos = () => {
   const [produtos, setProdutos] = useState([]);
   const [filteredProdutos, setFilteredProdutos] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState('');
+  const [modalType, setModalType] = useState('Add');
   const [currentProdutos, setCurrentProdutos] = useState({ codigo: '', nome: '', descricao: '', valor: '', quantidade: '', tipo: '', marca: '', categoria: '', foto: ''  });
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -16,23 +17,25 @@ const Table_Produtos = () => {
   }, []);
 
   useEffect(() => {
-    // Filter produtos based on searchTerm
     setFilteredProdutos(
       produtos.filter((prod) =>
-        prod.nome.toLowerCase().includes(searchTerm.toLowerCase())
+        prod.nome && prod.nome.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [searchTerm, produtos]);
 
   const fetchProdutos = async () => {
     // Simulate a server fetch
-    const data = [
-      { codigo: 1, nome: 'Fiction' },
-      { codigo: 2, nome: 'Non-fiction' },
-      { codigo: 3, nome: 'Science' },
-    ];
-    setProdutos(data);
-    setFilteredProdutos(data);
+    try {
+      const response = await axios.get('http://localhost:3000/produto');
+      if (response.data && response.data.produto && Array.isArray(response.data.produto)) {
+        setProdutos(response.data.produto);
+      } else {
+        console.error('Dados inválidos:', response.data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error.message);
+    }
   };
 
   const showModalHandler = (type, produto) => {
@@ -52,19 +55,29 @@ const Table_Produtos = () => {
     setCurrentProdutos((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();// Evita que o formulário recarregue a página ao ser enviado
      // Verifica o tipo de modal (Adição ou Edição) para decidir o que fazer
-    if (modalType === 'Add') {
-      setProdutos([...produtos, { ...currentProdutos, codigo: produtos.length + 1 }]);
+    try{
+     if (modalType === 'Add') {
+      const response = await axios.post('http://localhost:3000/produto', currentProdutos);
+        setProdutos([...produtos, response.data]);
     } else if (modalType === 'Edit') {
-      setProdutos(produtos.map((prod) => (prod.codigo === currentProdutos.codigo ? currentProdutos : prod)));
+      await axios.put(`http://localhost:3000/produto`, currentProdutos);
+      setProdutos(produtos.map((user) => (user.codigo === currentProdutos.codigo ? currentProdutos : user)));
     }
     handleCloseModal();
-  };
-
-  const handleDelete = (codigo) => {
-    setProdutos(produtos.filter((prod) => prod.codigo !== codigo));
+  } catch (error) {
+    console.error('Erro ao salvar usuário:', error.message);
+  }
+};
+  const handleDelete = async (codigo) => {
+    try {
+      await axios.delete(`http://localhost:3000/produto`, { data: { codigo } });
+      setProdutos(produtos.filter((prod) => prod.codigo !== codigo));
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error.message);
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -128,16 +141,6 @@ const Table_Produtos = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formCodigo">
-              <Form.Label>Código</Form.Label>
-              <Form.Control
-                type="number"
-                name="codigo"
-                value={currentProdutos.codigo}
-                onChange={handleChange}
-                readOnly={modalType === 'Edit'}
-              />
-            </Form.Group>
             <Form.Group controlId="formNome">
               <Form.Label>Nome</Form.Label>
               <Form.Control
