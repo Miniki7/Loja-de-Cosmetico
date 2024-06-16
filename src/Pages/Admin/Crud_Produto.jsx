@@ -1,10 +1,10 @@
 import React from 'react'
-import Tables from '../../Components/Tables/Tables'
+import Table_Produtos from '../../Components/Tables/Table_Produtos'
 
 const Crud_Produto = () => {
   return (
     <div>
-      <Tables/>
+      <Table_Produtos/>
     </div>
   )
 }

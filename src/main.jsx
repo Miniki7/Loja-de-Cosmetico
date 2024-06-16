@@ -4,9 +4,10 @@ import ShopCategory from './Pages/ShopCategory';
 import Product from './Pages/Product';
 import LoginSignup from './Pages/LoginSignup';
 import Cart from './Pages/Cart';
-import men_banner from './Components/Assets/banner_mens.png';
-import women_banner from './Components/Assets/banner_women.png';
+import banner_perfumaria from './Components/Assets/banner_perfumaria.png';
 import kids_banner from './Components/Assets/banner_kids.png';
+import banner_unhas from './Components/Assets/banner_unhas.png';
+import banner_maquiagem from './Components/Assets/banner_maquiagem.jpg';
 import ShopContextProvider from './Context/ShopContext'; 
 import Crud_Fornecedor from './Pages/Admin/Crud_Fornecedor'
 import Crud_Produto from './Pages/Admin/Crud_Produto'
@@ -14,7 +15,7 @@ import Crud_Usuario from './Pages/Admin/Crud_Usuario'
 import Menu_de_Cadastros from './Pages/Admin/Menu_de_Cadastros'
 import RegisterUser from './Pages/RegisterUser/RegisterUser'
 
-
+/* https://stackblitz.com/edit/react-base64-image?file=src%2FImageUpload.js */
 
 import React from 'react';
 import './index.css';
@@ -24,7 +25,6 @@ import Navbar from './Components/Navbar/Navbar';
 
 //import da estilização da tabela
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 const Layout = () => (
   <div>
@@ -46,11 +46,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/maquiagem',
-    element: <ShopCategory banner={men_banner} category="men" />
+    element: <ShopCategory banner={banner_maquiagem} category="men" />
   },
   {
     path: '/perfumaria',
-    element: <ShopCategory banner={women_banner} category="women" />
+    element: <ShopCategory banner={banner_perfumaria} category="women" />
   },
   {
     path: '/cabelos',
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/unhas',
-    element: <ShopCategory banner={kids_banner} category="kid" />
+    element: <ShopCategory banner={banner_unhas} category="kid" />
   },
   {
     path: '/product',
@@ -95,7 +95,7 @@ const router = createBrowserRouter([
   {
     path: '/Crud_Fornecedor',
     element: <Crud_Fornecedor />
-  }
+  },
 ],
   },
 ]);
