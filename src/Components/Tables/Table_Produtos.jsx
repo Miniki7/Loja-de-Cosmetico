@@ -210,7 +210,7 @@ const Table_Produtos = () => {
                 type="file"
                 name="foto"
                 value={currentProdutos.foto}
-                onChange={handleChange}
+                onChange={handleChange} //dando ploblema aqui
               />
                </Form.Group>
             <Button variant="primary" type="submit">
