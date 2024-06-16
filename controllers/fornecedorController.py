@@ -2,7 +2,6 @@ from flask import request
 from database.db import db
 from models.fornecedor import fornecedor
 
-
 def fornecedorController():
 
         if request.method == 'POST':
