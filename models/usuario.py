@@ -3,6 +3,7 @@ from database.db import db
 class usuario(db.Model): 
     def to_dict(self):
         return{
+            'codigo': self.codigo,
             'nome': self.nome,
             'email': self.email,
             'senha': self.senha,
@@ -16,7 +17,8 @@ class usuario(db.Model):
     role = db.Column(db.String('50'))
 
 
-    def __init__(self, nome, email, senha, role):
+    def __init__(self,codigo, nome, email, senha, role):
+        self.codigo = codigo
         self.nome = nome
         self.email = email
         self.senha = senha

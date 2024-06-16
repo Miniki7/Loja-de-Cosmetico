@@ -3,6 +3,7 @@ from database.db import db
 class produto(db.Model): 
     def to_dict(self):
         return{
+            'codigo': self.codigo,
             'nome': self.nome,
             'descricao': self.descricao,
             'valor': self.valor,
