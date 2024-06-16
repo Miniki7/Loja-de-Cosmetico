@@ -8,29 +8,22 @@ class ImageUpload extends React.Component {
     };
   }
 
-  onChange = e => {
-    debugger;
-    console.log("file uploaded: ", e.target.files[0]);
-    let file = e.target.files[0];
-
+  onChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = this._handleReaderLoaded.bind(this);
-      reader.readAsBinaryString(file);
+      reader.onload = this.handleReaderLoaded.bind(this);
+      reader.readAsDataURL(file); // Usar readAsDataURL para carregar a imagem
     }
   };
 
-  _handleReaderLoaded = e => {
-    console.log("file uploaded 2: ", e);
-    let binaryString = e.target.result;
-    this.setState({
-      base64Data: btoa(binaryString)
-    });
+  handleReaderLoaded = (e) => {
+    const base64Data = e.target.result;
+    this.setState({ base64Data });
+    this.props.onImageUpload(base64Data); // Chama a função passada como prop
   };
 
   render() {
-    const { base64Data } = this.state;
-    console.log("base64", this.state);
     return (
       <div>
         <input
@@ -38,12 +31,8 @@ class ImageUpload extends React.Component {
           name="image"
           id="file"
           accept=".jpg, .jpeg, .png"
-          onChange={e => this.onChange(e)}
+          onChange={this.onChange}
         />
-
-        <p>base64 string: {base64Data}</p>
-        <br />
-        {base64Data != null && <img src={`data:image;base64,${base64Data}`} />}
       </div>
     );
   }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import './Tables.css';
+import ImageUpload from '../ImageUpload/ImageUpload.jsx'; // Importe o componente de upload de imagem
 
 const Table_Produtos = () => {
   const [produtos, setProdutos] = useState([]);
@@ -46,7 +47,7 @@ const Table_Produtos = () => {
 	
   const handleCloseModal = () => setShowModal(false);
 
-  // handleChange é um manipulador de eventos comum usado para atualizar os detalhes do produto conforme o usuário insere informações em algum campo de entrada 
+  // handleChange é um manipulador de eventos comum usado para atualizar os detalhes do produto conforme o produto insere informações em algum campo de entrada 
   const handleChange = (e) => {
     // Extrai o 'name' e 'value' do elemento que acionou o evento (input, select, etc.)
     const { name, value, } = e.target;
@@ -62,13 +63,13 @@ const Table_Produtos = () => {
      if (modalType === 'Add') {
       const response = await axios.post('http://localhost:3000/produto', currentProdutos);
         setProdutos([...produtos, response.data]);
-    } else if (modalType === 'Edit') {
+    }  else if (modalType === 'Edit') {
       await axios.put(`http://localhost:3000/produto`, currentProdutos);
-      setProdutos(produtos.map((user) => (user.codigo === currentProdutos.codigo ? currentProdutos : user)));
+      setProdutos(produtos.map((prod) => (prod.codigo === currentProdutos.codigo ? currentProdutos : prod)));
     }
     handleCloseModal();
   } catch (error) {
-    console.error('Erro ao salvar usuário:', error.message);
+    console.error('Erro ao salvar produto:', error.message);
   }
 };
   const handleDelete = async (codigo) => {
@@ -76,12 +77,15 @@ const Table_Produtos = () => {
       await axios.delete(`http://localhost:3000/produto`, { data: { codigo } });
       setProdutos(produtos.filter((prod) => prod.codigo !== codigo));
     } catch (error) {
-      console.error('Erro ao deletar usuário:', error.message);
+      console.error('Erro ao deletar produto:', error.message);
     }
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+  const handleImageUpload = (base64Data) => {
+    setCurrentProdutos((prev) => ({ ...prev, foto: base64Data }));
   };
 
   return (
@@ -124,7 +128,7 @@ const Table_Produtos = () => {
                 <td>{prod.tipo}</td>
                 <td>{prod.marca}</td>
                 <td>{prod.categoria}</td>
-                <td>{prod.foto}</td>
+                <td>{prod.foto ? <img src={`data:image;base64,${prod.foto}`} alt="Produto" style={{ width: '50px', height: '50px' }} /> : 'Sem Foto'}</td>
                 <td>
                   <Button variant="danger" onClick={() => handleDelete(prod.codigo)}>Excluir</Button>
                   <Button variant="primary" onClick={() => showModalHandler('Edit', prod)}>Alterar</Button>
@@ -204,15 +208,10 @@ const Table_Produtos = () => {
                 onChange={handleChange}
               />
               </Form.Group>
-            <Form.Group controlId="formFoto">
-              <Form.Label>Foto</Form.Label>
-              <Form.Control
-                type="file"
-                name="foto"
-                value={currentProdutos.foto}
-                onChange={handleChange} //dando ploblema aqui
-              />
-               </Form.Group>
+              <Form.Group controlId="formFoto">
+                <Form.Label htmlFor="foto">Foto</Form.Label>
+                <ImageUpload onImageUpload={handleImageUpload} />
+            </Form.Group>
             <Button variant="primary" type="submit">
               {modalType === 'Add' ? 'Adicionar' : 'Salvar'}
             </Button>

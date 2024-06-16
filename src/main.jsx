@@ -47,19 +47,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/maquiagem',
-    element: <ShopCategory banner={banner_maquiagem} category="men" />
+    element: <ShopCategory banner={banner_maquiagem} category="maquiagem" />
   },
   {
     path: '/perfumaria',
-    element: <ShopCategory banner={banner_perfumaria} category="women" />
+    element: <ShopCategory banner={banner_perfumaria} category="perfumaria" />
   },
   {
     path: '/cabelos',
-    element: <ShopCategory banner={banner_cabelos} category="kid" />
+    element: <ShopCategory banner={banner_cabelos} category="cabelos" />
   },
   {
     path: '/unhas',
-    element: <ShopCategory banner={banner_unhas} category="kid" />
+    element: <ShopCategory banner={banner_unhas} category="unhas" />
   },
   {
     path: '/product',
