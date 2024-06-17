@@ -22,7 +22,7 @@ class produto(db.Model):
     tipo = db.Column(db.String('50'))
     marca = db.Column(db.String('50'))
     categoria = db.Column(db.String('50'))
-    foto = db.Column(db.String('100'))
+    foto = db.Column(db.Text)
 
 
     def __init__(self, nome, descricao, valor, quantidade, tipo, marca, categoria, foto):
