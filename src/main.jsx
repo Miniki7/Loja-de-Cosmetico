@@ -8,6 +8,7 @@ import banner_perfumaria from './Components/Assets/banner_perfumaria.png';
 import kids_banner from './Components/Assets/banner_kids.png';
 import banner_unhas from './Components/Assets/banner_unhas.png';
 import banner_maquiagem from './Components/Assets/banner_maquiagem.jpg';
+import banner_cabelos from './Components/Assets/banner_cabelos.png';
 import ShopContextProvider from './Context/ShopContext'; 
 import Crud_Fornecedor from './Pages/Admin/Crud_Fornecedor'
 import Crud_Produto from './Pages/Admin/Crud_Produto'
@@ -46,19 +47,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/maquiagem',
-    element: <ShopCategory banner={banner_maquiagem} category="men" />
+    element: <ShopCategory banner={banner_maquiagem} category="maquiagem" />
   },
   {
     path: '/perfumaria',
-    element: <ShopCategory banner={banner_perfumaria} category="women" />
+    element: <ShopCategory banner={banner_perfumaria} category="perfumaria" />
   },
   {
     path: '/cabelos',
-    element: <ShopCategory banner={kids_banner} category="kid" />
+    element: <ShopCategory banner={banner_cabelos} category="cabelos" />
   },
   {
     path: '/unhas',
-    element: <ShopCategory banner={banner_unhas} category="kid" />
+    element: <ShopCategory banner={banner_unhas} category="unhas" />
   },
   {
     path: '/product',

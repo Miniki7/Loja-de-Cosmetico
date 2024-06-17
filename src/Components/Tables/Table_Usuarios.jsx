@@ -1,71 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 import './Tables.css';
 
 const Table_Usuarios = () => {
-  const [produtos, setProdutos] = useState([]);
-  const [filteredProdutos, setFilteredProdutos] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+  const [filteredUsuarios, setFilteredUsuarios] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState('');
-  const [currentProdutos, setCurrentProdutos] = useState({ codigo: '', nome: '', email: '', senha: '', role: ''});
+  const [modalType, setModalType] = useState('Add');
+  const [currentUsuario, setCurrentUsuario] = useState({ codigo: '', nome: '', email: '', senha: '', role: '' });
   const [searchTerm, setSearchTerm] = useState('');
-	
 
   useEffect(() => {
-    // Fetch products from server
-    fetchProdutos();
+    fetchUsuarios();
   }, []);
 
   useEffect(() => {
-    // Filter produtos based on searchTerm
-    setFilteredProdutos(
-      produtos.filter((prod) =>
-        prod.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    setFilteredUsuarios(
+      usuarios.filter((user) =>
+        user.nome.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-  }, [searchTerm, produtos]);
+  }, [searchTerm, usuarios]);
 
-  const fetchProdutos = async () => {
-    // Simulate a server fetch
-    const data = [
-      { codigo: 1, nome: 'Fiction' },
-      { codigo: 2, nome: 'Non-fiction' },
-      { codigo: 3, nome: 'Science' },
-    ];
-    setProdutos(data);
-    setFilteredProdutos(data);
+  const fetchUsuarios = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/usuario');
+      if (response.data && response.data.usuario && Array.isArray(response.data.usuario)) {
+        setUsuarios(response.data.usuario);
+      } else {
+        console.error('Dados inválidos:', response.data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar usuários:', error.message);
+    }
   };
 
-  const showModalHandler = (type, produto) => {
+  const showModalHandler = (type, usuario = { codigo: '', nome: '', email: '', senha: '', role: '' }) => {
     setModalType(type);
-    setCurrentProdutos(produto || {codigo: '', nome: '', email: '', senha: '', role: '' });
+    setCurrentUsuario(usuario);
     setShowModal(true);
   };
-	
+  
   const handleCloseModal = () => setShowModal(false);
 
-  // handleChange é um manipulador de eventos comum usado para atualizar os detalhes do produto conforme o usuário insere informações em algum campo de entrada 
   const handleChange = (e) => {
-    // Extrai o 'name' e 'value' do elemento que acionou o evento (input, select, etc.)
-    const { name, value, } = e.target;
-     // Atualiza os detalhes do produto com o novo valor usando o spread operator
-      // e mantém os valores anteriores usando uma função de atualização no setState
-    setCurrentProdutos((prev) => ({ ...prev, [name]: value }));
+    const { name, value } = e.target;
+    setCurrentUsuario((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();// Evita que o formulário recarregue a página ao ser enviado
-     // Verifica o tipo de modal (Adição ou Edição) para decidir o que fazer
-    if (modalType === 'Add') {
-      setProdutos([...produtos, { ...currentProdutos, codigo: produtos.length + 1 }]);
-    } else if (modalType === 'Edit') {
-      setProdutos(produtos.map((prod) => (prod.codigo === currentProdutos.codigo ? currentProdutos : prod)));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (modalType === 'Add') {
+        const response = await axios.post('http://localhost:3000/usuario', currentUsuario);
+        setUsuarios([...usuarios, response.data]);
+      } else if (modalType === 'Edit') {
+        await axios.put(`http://localhost:3000/usuario`, currentUsuario);
+        setUsuarios(usuarios.map((user) => (user.codigo === currentUsuario.codigo ? currentUsuario : user)));
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error('Erro ao salvar usuário:', error.message);
     }
-    handleCloseModal();
   };
 
-  const handleDelete = (codigo) => {
-    setProdutos(produtos.filter((prod) => prod.codigo !== codigo));
+  const handleDelete = async (codigo) => {
+    try {
+      await axios.delete(`http://localhost:3000/usuario`, { data: { codigo } });
+      setUsuarios(usuarios.filter((user) => user.codigo !== codigo));
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error.message);
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -75,7 +81,7 @@ const Table_Usuarios = () => {
   return (
     <div className="container-fluid mt-4">
       <div className="margim">
-        <h2>Lista de Produtos:</h2>
+        <h2>Lista de Usuários:</h2>
         <Form className="mb-3 d-flex">
           <Form.Control
             type="text"
@@ -89,28 +95,25 @@ const Table_Usuarios = () => {
         <table className="table table-striped w-100">
           <thead>
             <tr>
-              <th>Codigo</th>
+              <th>Código</th>
               <th>Nome</th>
               <th>Email</th>
               <th>Senha</th>
               <th>Role</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
-            {filteredProdutos.map((prod) => (
-              <tr key={prod.codigo}>
-                <td>{prod.codigo}</td>
-                <td>{prod.nome}</td>
-                <td>{prod.email}</td>
-                <td>{prod.senha}</td>
-                <td>{prod.role}</td>
-                <td>{prod.tipo}</td>
-                <td>{prod.marca}</td>
-                <td>{prod.categoria}</td>
-                <td>{prod.foto}</td>
+            {filteredUsuarios.map((user) => (
+              <tr key={user.codigo}>
+                <td>{user.codigo}</td>
+                <td>{user.nome}</td>
+                <td>{user.email}</td>
+                <td>{user.senha}</td>
+                <td>{user.role}</td>
                 <td>
-                  <Button variant="danger" onClick={() => handleDelete(prod.codigo)}>Excluir</Button>
-                  <Button variant="primary" onClick={() => showModalHandler('Edit', prod)}>Alterar</Button>
+                  <Button variant="danger" onClick={() => handleDelete(user.codigo)}>Excluir</Button>
+                  <Button variant="primary" onClick={() => showModalHandler('Edit', user)}>Alterar</Button>
                 </td>
               </tr>
             ))}
@@ -120,56 +123,46 @@ const Table_Usuarios = () => {
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{modalType === 'Add' ? 'Adicionar Produto' : 'Editar Produto'}</Modal.Title>
+          <Modal.Title>{modalType === 'Add' ? 'Adicionar Usuário' : 'Editar Usuário'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formCodigo">
-              <Form.Label>Código</Form.Label>
-              <Form.Control
-                type="number"
-                name="codigo"
-                value={currentProdutos.codigo}
-                onChange={handleChange}
-                readOnly={modalType === 'Edit'}
-              />
-            </Form.Group>
             <Form.Group controlId="formNome">
               <Form.Label>Nome</Form.Label>
               <Form.Control
                 type="text"
                 name="nome"
-                value={currentProdutos.nome}
+                value={currentUsuario.nome}
                 onChange={handleChange}
               />
-               </Form.Group>
-               <Form.Group controlId="formEmail">
+            </Form.Group>
+            <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
-                value={currentProdutos.email}
+                value={currentUsuario.email}
                 onChange={handleChange}
               />
-               </Form.Group>
+            </Form.Group>
             <Form.Group controlId="formSenha">
               <Form.Label>Senha</Form.Label>
               <Form.Control
                 type="text"
                 name="senha"
-                value={currentProdutos.senha}
+                value={currentUsuario.senha}
                 onChange={handleChange}
               />
-               </Form.Group>
+            </Form.Group>
             <Form.Group controlId="formRole">
               <Form.Label>Role</Form.Label>
               <Form.Control
                 type="text"
                 name="role"
-                value={currentProdutos.role}
+                value={currentUsuario.role}
                 onChange={handleChange}
               />
-               </Form.Group>
+            </Form.Group>
             <Button variant="primary" type="submit">
               {modalType === 'Add' ? 'Adicionar' : 'Salvar'}
             </Button>

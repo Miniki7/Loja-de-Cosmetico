@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 import './Tables.css';
+import ImageUpload from '../ImageUpload/ImageUpload.jsx'; // Importe o componente de upload de imagem
 
 const Table_Produtos = () => {
   const [produtos, setProdutos] = useState([]);
   const [filteredProdutos, setFilteredProdutos] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState('');
+  const [modalType, setModalType] = useState('Add');
   const [currentProdutos, setCurrentProdutos] = useState({ codigo: '', nome: '', descricao: '', valor: '', quantidade: '', tipo: '', marca: '', categoria: '', foto: ''  });
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -16,23 +18,25 @@ const Table_Produtos = () => {
   }, []);
 
   useEffect(() => {
-    // Filter produtos based on searchTerm
     setFilteredProdutos(
       produtos.filter((prod) =>
-        prod.nome.toLowerCase().includes(searchTerm.toLowerCase())
+        prod.nome && prod.nome.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [searchTerm, produtos]);
 
   const fetchProdutos = async () => {
     // Simulate a server fetch
-    const data = [
-      { codigo: 1, nome: 'Fiction' },
-      { codigo: 2, nome: 'Non-fiction' },
-      { codigo: 3, nome: 'Science' },
-    ];
-    setProdutos(data);
-    setFilteredProdutos(data);
+    try {
+      const response = await axios.get('http://localhost:3000/produto');
+      if (response.data && response.data.produto && Array.isArray(response.data.produto)) {
+        setProdutos(response.data.produto);
+      } else {
+        console.error('Dados inválidos:', response.data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error.message);
+    }
   };
 
   const showModalHandler = (type, produto) => {
@@ -43,7 +47,7 @@ const Table_Produtos = () => {
 	
   const handleCloseModal = () => setShowModal(false);
 
-  // handleChange é um manipulador de eventos comum usado para atualizar os detalhes do produto conforme o usuário insere informações em algum campo de entrada 
+  // handleChange é um manipulador de eventos comum usado para atualizar os detalhes do produto conforme o produto insere informações em algum campo de entrada 
   const handleChange = (e) => {
     // Extrai o 'name' e 'value' do elemento que acionou o evento (input, select, etc.)
     const { name, value, } = e.target;
@@ -52,23 +56,36 @@ const Table_Produtos = () => {
     setCurrentProdutos((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();// Evita que o formulário recarregue a página ao ser enviado
      // Verifica o tipo de modal (Adição ou Edição) para decidir o que fazer
-    if (modalType === 'Add') {
-      setProdutos([...produtos, { ...currentProdutos, codigo: produtos.length + 1 }]);
-    } else if (modalType === 'Edit') {
+    try{
+     if (modalType === 'Add') {
+      const response = await axios.post('http://localhost:3000/produto', currentProdutos);
+        setProdutos([...produtos, response.data]);
+    }  else if (modalType === 'Edit') {
+      await axios.put(`http://localhost:3000/produto`, currentProdutos);
       setProdutos(produtos.map((prod) => (prod.codigo === currentProdutos.codigo ? currentProdutos : prod)));
     }
     handleCloseModal();
-  };
-
-  const handleDelete = (codigo) => {
-    setProdutos(produtos.filter((prod) => prod.codigo !== codigo));
+  } catch (error) {
+    console.error('Erro ao salvar produto:', error.message);
+  }
+};
+  const handleDelete = async (codigo) => {
+    try {
+      await axios.delete(`http://localhost:3000/produto`, { data: { codigo } });
+      setProdutos(produtos.filter((prod) => prod.codigo !== codigo));
+    } catch (error) {
+      console.error('Erro ao deletar produto:', error.message);
+    }
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+  const handleImageUpload = (base64Data) => {
+    setCurrentProdutos((prev) => ({ ...prev, foto: base64Data }));
   };
 
   return (
@@ -111,7 +128,7 @@ const Table_Produtos = () => {
                 <td>{prod.tipo}</td>
                 <td>{prod.marca}</td>
                 <td>{prod.categoria}</td>
-                <td>{prod.foto}</td>
+                <td>{prod.foto ? <img src={`${prod.foto}`} alt="Produto" style={{ width: '50px', height: '50px' }} /> : 'Sem Foto'}</td>
                 <td>
                   <Button variant="danger" onClick={() => handleDelete(prod.codigo)}>Excluir</Button>
                   <Button variant="primary" onClick={() => showModalHandler('Edit', prod)}>Alterar</Button>
@@ -128,16 +145,6 @@ const Table_Produtos = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formCodigo">
-              <Form.Label>Código</Form.Label>
-              <Form.Control
-                type="number"
-                name="codigo"
-                value={currentProdutos.codigo}
-                onChange={handleChange}
-                readOnly={modalType === 'Edit'}
-              />
-            </Form.Group>
             <Form.Group controlId="formNome">
               <Form.Label>Nome</Form.Label>
               <Form.Control
@@ -166,10 +173,10 @@ const Table_Produtos = () => {
               />
                </Form.Group>
             <Form.Group controlId="formQuantidade">
-              <Form.Label>quantidade</Form.Label>
+              <Form.Label>Quantidade</Form.Label>
               <Form.Control
                 type="number"
-                name="Quantidade"
+                name="quantidade"
                 value={currentProdutos.quantidade}
                 onChange={handleChange}
               />
@@ -201,15 +208,10 @@ const Table_Produtos = () => {
                 onChange={handleChange}
               />
               </Form.Group>
-            <Form.Group controlId="formFoto">
-              <Form.Label>Foto</Form.Label>
-              <Form.Control
-                type="file"
-                name="foto"
-                value={currentProdutos.foto}
-                onChange={handleChange}
-              />
-               </Form.Group>
+              <Form.Group controlId="formFoto">
+                <Form.Label htmlFor="foto">Foto</Form.Label>
+                <ImageUpload onImageUpload={handleImageUpload} />
+            </Form.Group>
             <Button variant="primary" type="submit">
               {modalType === 'Add' ? 'Adicionar' : 'Salvar'}
             </Button>

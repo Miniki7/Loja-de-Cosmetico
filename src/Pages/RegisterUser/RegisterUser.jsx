@@ -1,46 +1,44 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './RegisterUser.css'
+import axios from "axios";
 
 const RegisterUser = () => {
-    const [name, setName] = useState("");
+    const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [repeatPassword, setRepeatPassword] = useState("");
+    const [senha, setSenha] = useState("");
+    const [repeatSenha, setRepeatSenha] = useState("");
+    const [role, setRole] = useState("user")
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
     
-        if (password !== repeatPassword) {
+        if (senha !== repeatSenha) {
             alert("As senhas não coincidem!");
             return;
         }
     
         const userData = {
-            name,
+            nome,
             email,
-            password
+            senha,
+            role
         };
 
         try {
-            const response = await fetch("http://localhost:3000/users", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData)
-            });
+            const response = await axios.post("http://localhost:3000/usuario", userData);
     
             if (!response.ok) {
                 throw new Error("Erro ao cadastrar usuário");
             }
     
             console.log("Usuário cadastrado com sucesso!");
-            setName("");
+            setNome("");
             setEmail("");
-            setPassword("");
-            setRepeatPassword("");
+            setSenha("");
+            setRepeatSenha("");
+            setRole("user");
             navigate("/login");
             
         } catch (error) {
@@ -62,8 +60,8 @@ const RegisterUser = () => {
                         className="input-login"
                         type="text"
                         placeholder="Nome"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
                         required
                     />
                 </div>
@@ -84,8 +82,8 @@ const RegisterUser = () => {
                         className="input-login"
                         type="password"
                         placeholder="Senha"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
                         required
                     />
                 </div>
@@ -95,8 +93,8 @@ const RegisterUser = () => {
                         className="input-login"
                         type="password"
                         placeholder="Repita a senha"
-                        value={repeatPassword}
-                        onChange={(e) => setRepeatPassword(e.target.value)}
+                        value={repeatSenha}
+                        onChange={(e) => setRepeatSenha(e.target.value)}
                         required
                     />
                 </div>
