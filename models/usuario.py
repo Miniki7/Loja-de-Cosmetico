@@ -16,7 +16,6 @@ class usuario(db.Model):
     senha = db.Column(db.String('50'))
     role = db.Column(db.String('50'))
 
-
     def __init__(self, nome, email, senha, role):
         self.nome = nome
         self.email = email

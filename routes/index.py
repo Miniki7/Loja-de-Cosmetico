@@ -11,4 +11,3 @@ def default_routes(app):
     fornecedores(app)
     venda(app)
     produto_fornecedor(app)
-

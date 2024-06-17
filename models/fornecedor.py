@@ -18,13 +18,9 @@ class fornecedor(db.Model):
     telefone = db.Column(db.Integer)
     endereco = db.Column(db.String('50'))
 
-
     def __init__(self, nome, cnpj, email, telefone, endereco):
         self.nome = nome
         self.cnpj = cnpj
         self.email = email
         self.telefone = telefone
         self.endereco = endereco
-
-
-

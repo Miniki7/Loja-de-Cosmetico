@@ -12,7 +12,7 @@ def produtoController():
                 produtos = produto(data['nome'], data['descricao'], data['valor'], data['quantidade'], data['tipo'], data['marca'], data['categoria'], data['foto'])
                 db.session.add(produtos)
                 db.session.commit()
-                return 'Produto criado com sucesso', 200 
+                return 'Produto criado com sucesso', 200
             
             except Exception as e:
                 return 'o produto nao foi criado, {}'.format(e), 405

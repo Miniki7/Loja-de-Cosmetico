@@ -12,7 +12,7 @@ def produto_fornecedorController():
                 produto_fornecedores = produto_fornecedor(data['codproduto'], data['codfornecedor'])
                 db.session.add(produto_fornecedores)
                 db.session.commit()
-                return 'produto_fornecedor criado com sucesso', 200 
+                return 'produto_fornecedor criado com sucesso', 200
             
             except Exception as e:
                 return 'o produto_fornecedor nao foi criado, {}'.format(e), 405

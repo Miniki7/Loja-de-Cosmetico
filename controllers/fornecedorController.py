@@ -60,3 +60,4 @@ def fornecedorController():
             
             except Exception as e:
                 return 'nao foi possivel alterar fornecedor, {}'.format(str(e)), 405
+

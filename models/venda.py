@@ -16,7 +16,7 @@ class venda(db.Model):
     codproduto = db.Column(ForeignKey('produto.codigo'))
     codusuario = db.Column(ForeignKey('usuario.codigo'))
     quantidade = db.Column(db.Integer)
-    valor = db.Column(db.Float)    
+    valor = db.Column(db.Float) 
 
     produto = relationship('produto', backref='venda')
     usuario = relationship('usuario', backref='venda')
