@@ -128,7 +128,7 @@ const Table_Produtos = () => {
                 <td>{prod.tipo}</td>
                 <td>{prod.marca}</td>
                 <td>{prod.categoria}</td>
-                <td>{prod.foto ? <img src={`data:image;base64,${prod.foto}`} alt="Produto" style={{ width: '50px', height: '50px' }} /> : 'Sem Foto'}</td>
+                <td>{prod.foto ? <img src={`${prod.foto}`} alt="Produto" style={{ width: '50px', height: '50px' }} /> : 'Sem Foto'}</td>
                 <td>
                   <Button variant="danger" onClick={() => handleDelete(prod.codigo)}>Excluir</Button>
                   <Button variant="primary" onClick={() => showModalHandler('Edit', prod)}>Alterar</Button>
