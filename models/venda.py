@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 class venda(db.Model): 
     def to_dict(self):
         return{
+            'codigo': self.codigo,
             'codproduto': self.codproduto,
             'codusuario': self.codusuario,
             'quantidade': self.quantidade,

@@ -3,6 +3,7 @@ from database.db import db
 class fornecedor(db.Model): 
     def to_dict(self):
         return{
+            'codigo': self.codigo,
             'nome': self.nome,
             'cnpj': self.cnpj,
             'email': self.email,

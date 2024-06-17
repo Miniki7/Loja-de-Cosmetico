@@ -3,6 +3,7 @@ from database.db import db
 class usuario(db.Model): 
     def to_dict(self):
         return{
+            'codigo': self.codigo,
             'nome': self.nome,
             'email': self.email,
             'senha': self.senha,

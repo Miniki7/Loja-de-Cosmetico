@@ -15,7 +15,7 @@ def fornecedorController():
                 return 'Fornecedor criado com sucesso', 200 
             
             except Exception as e:
-                return 'o usuario nao foi criado, {}'.format(e), 405
+                return 'o fornecedor nao foi criado, {}'.format(e), 405
 
 
         elif request.method == 'GET':
