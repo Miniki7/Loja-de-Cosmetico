@@ -1,6 +1,6 @@
 from flask import request
 from database.db import db
-from models.usuario import usuario
+from models.usuario import usuario, login
 
 def usuarioController():
 
